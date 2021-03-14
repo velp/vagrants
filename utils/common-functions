@@ -9,6 +9,7 @@ function centos_setup {
     sudo yum install kernel-devel
     sudo yum install bmon -y
     sudo yum install -y wget python3-systemd
+    sudo systemctl disable firewalld
 }
 
 function install_ovs {
