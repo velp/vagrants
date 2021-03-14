@@ -8,7 +8,6 @@ function centos_setup {
     sudo yum install python3-devel python-six openssl-devel python36-six -y
     sudo yum install kernel-devel
     sudo yum install bmon -y
-    sudo setenforce 0
     sudo yum install -y wget python3-systemd
 }
 
@@ -84,10 +83,6 @@ function install_devstack {
 
     git clone https://opendev.org/openstack/devstack.git ~/devstack
     git clone https://opendev.org/openstack/neutron.git ~/neutron
-
-    pushd ~/devstack
-    git fetch https://review.opendev.org/openstack/devstack refs/changes/54/755554/1 && git checkout FETCH_HEAD
-    popd
 
     if [[ "${type}" == "master" ]]; then
        cp /home/vagrant/neutron/devstack/ovn-local.conf.sample /home/vagrant/devstack/local.conf
