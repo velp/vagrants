@@ -35,16 +35,16 @@ function install_ovs {
 function install_ovn {
     install_ovs
 
-    GIT_REPO=${GIT_REPO:-https://github.com/ovn-org/ovn}
-    GIT_BRANCH=${GIT_BRANCH:-master}
+    OVN_GIT_REPO=${OVN_GIT_REPO:-https://github.com/ovn-org/ovn}
+    OVN_GIT_BRANCH=${OVN_GIT_BRANCH:-master}
 
     cd
     if [ ! -d ./ovn ]; then
-        git clone --depth 1 --no-single-branch $GIT_REPO
+        git clone --depth 1 --no-single-branch $OVN_GIT_REPO
         cd ovn
 
-        if [[ "z$GIT_BRANCH" != "z" ]]; then
-            git checkout $GIT_BRANCH
+        if [[ "z$OVN_GIT_BRANCH" != "z" ]]; then
+            git checkout $OVN_GIT_BRANCH
         fi
     else
         cd ovn
@@ -81,7 +81,14 @@ function install_devstack {
     centos_setup
 
     git clone https://opendev.org/openstack/devstack.git ~/devstack
+    if [[ "z$DEVSTACK_GIT_BRANCH" != "z" ]]; then
+        git checkout $DEVSTACK_GIT_BRANCH
+    fi
+
     git clone https://opendev.org/openstack/neutron.git ~/neutron
+    if [[ "z$NEUTRON_GIT_BRANCH" != "z" ]]; then
+        git checkout $NEUTRON_GIT_BRANCH
+    fi
 
     pushd ~/devstack
     git fetch https://review.opendev.org/openstack/devstack refs/changes/54/755554/1 && git checkout FETCH_HEAD

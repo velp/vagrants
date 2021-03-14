@@ -1,8 +1,13 @@
-IPS = {central:   '192.168.150.100',
-       central_2: '172.24.4.10',
-       worker1:   '192.168.150.101',
-       worker1_2: '172.24.4.11',
-      }
+ENV_VARS = {
+    central:   '192.168.150.100',
+    central_2: '172.24.4.10',
+    worker1:   '192.168.150.101',
+    worker1_2: '172.24.4.11',
+    OVS_GIT_BRANCH: '04d140664a272fdbdd5352162ea9719b9c77cafe',
+    OVN_GIT_BRANCH: '7dad8ad7f9676c99fa9981a6c114d7707763288c',
+    DEVSTACK_GIT_BRANCH: '7de6e0b2eca9ac661a92badef4488d8d6380b06f',
+    NEUTRON_GIT_BRANCH: 'aa2f05870106d0402f4bd4c3f425c62ed11a2e7a',
+}
 
 RAM = 8000
 VCPUS = 4
@@ -43,24 +48,24 @@ Vagrant.configure(2) do |config|
 
      # central as controller node (northd/southd)
     config.vm.define 'central' do |central|
-        central.vm.network 'private_network', ip: IPS[:central]
-        central.vm.network 'private_network', ip: IPS[:central_2]
+        central.vm.network 'private_network', ip: ENV_VARS[:central]
+        central.vm.network 'private_network', ip: ENV_VARS[:central_2]
         central.vm.hostname = 'central'
         central.vm.provision :shell do |shell|
             shell.privileged = false
             shell.path = 'central.sh'
-            shell.env = IPS
+            shell.env = ENV_VARS
         end
     end
 
     config.vm.define 'worker1' do |worker1|
-        worker1.vm.network 'private_network', ip: IPS[:worker1]
-        worker1.vm.network 'private_network', ip: IPS[:worker1_2]
+        worker1.vm.network 'private_network', ip: ENV_VARS[:worker1]
+        worker1.vm.network 'private_network', ip: ENV_VARS[:worker1_2]
         worker1.vm.hostname = 'worker1'
         worker1.vm.provision :shell do |shell|
             shell.privileged = false
             shell.path = 'worker-1.sh'
-            shell.env = IPS
+            shell.env = ENV_VARS
         end
     end
 
