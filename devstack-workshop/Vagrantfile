@@ -3,14 +3,12 @@ ENV_VARS = {
     central_2: '172.24.4.10',
     worker1:   '192.168.150.101',
     worker1_2: '172.24.4.11',
-    OVS_GIT_BRANCH: '04d140664a272fdbdd5352162ea9719b9c77cafe',
-    OVN_GIT_BRANCH: '7dad8ad7f9676c99fa9981a6c114d7707763288c',
-    DEVSTACK_GIT_BRANCH: '7de6e0b2eca9ac661a92badef4488d8d6380b06f',
-    NEUTRON_GIT_BRANCH: 'aa2f05870106d0402f4bd4c3f425c62ed11a2e7a',
+    # OVS_GIT_BRANCH: '04d140664a272fdbdd5352162ea9719b9c77cafe',
+    # OVN_GIT_BRANCH: '7dad8ad7f9676c99fa9981a6c114d7707763288c',
 }
 
-RAM = 8000
-VCPUS = 4
+RAM = 16000
+VCPUS = 6
 
 Vagrant.configure(2) do |config|
 

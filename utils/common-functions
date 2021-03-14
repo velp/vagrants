@@ -8,6 +8,8 @@ function centos_setup {
     sudo yum install python3-devel python-six openssl-devel python36-six -y
     sudo yum install kernel-devel
     sudo yum install bmon -y
+    sudo setenforce 0
+    sudo yum install -y wget python3-systemd
 }
 
 function install_ovs {
@@ -81,14 +83,7 @@ function install_devstack {
     centos_setup
 
     git clone https://opendev.org/openstack/devstack.git ~/devstack
-    if [[ "z$DEVSTACK_GIT_BRANCH" != "z" ]]; then
-        git checkout $DEVSTACK_GIT_BRANCH
-    fi
-
     git clone https://opendev.org/openstack/neutron.git ~/neutron
-    if [[ "z$NEUTRON_GIT_BRANCH" != "z" ]]; then
-        git checkout $NEUTRON_GIT_BRANCH
-    fi
 
     pushd ~/devstack
     git fetch https://review.opendev.org/openstack/devstack refs/changes/54/755554/1 && git checkout FETCH_HEAD
@@ -102,9 +97,13 @@ function install_devstack {
        sed -i 's/SERVICE_HOST=.*/SERVICE_HOST='${service_ip}'/' /home/vagrant/devstack/local.conf
        sed -i 's/HOST_IP=.*/HOST_IP='${ip}'/' /home/vagrant/devstack/local.conf
     fi
+
     cd /home/vagrant/devstack
     sed -i '/STACK_USER=.*/d' /home/vagrant/devstack/local.conf
     sed -i '/ADMIN_PASSWORD.*/a STACK_USER=vagrant' /home/vagrant/devstack/local.conf
     sed -i 's/OVN_BUILD_MODULES=.*/OVN_BUILD_MODULES=False/' /home/vagrant/devstack/local.conf
+
+    git apply /vagrant/0001-Don-t-start-iptables-service-on-CentOS-Fedora.patch
+
     ./stack.sh
 }

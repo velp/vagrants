@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -x
 
+die() { echo "$*" 1>&2 ; exit 1; }
+
 source /vagrant/utils/common-functions
 
 hostname=$(hostname)
@@ -8,7 +10,7 @@ hostname=$(hostname)
 # install vim
 sudo yum install -y vim
 
-install_devstack master
+install_devstack master || die "Devstack preporation failed!"
 
 sudo yum remove -y iptables-services
 

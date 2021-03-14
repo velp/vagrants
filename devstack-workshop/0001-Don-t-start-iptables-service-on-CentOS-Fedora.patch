@@ -1,0 +1,38 @@
+From 5ce6a9032fc5f97ca3c7c887a9763320f78ead38 Mon Sep 17 00:00:00 2001
+From: Daniel Alvarez <dalvarez@redhat.com>
+Date: Thu, 1 Oct 2020 17:16:14 +0200
+Subject: [PATCH] Don't start iptables-service on CentOS/Fedora
+
+Installing and starting iptables service on CentOS 8 causes
+a default drop rule to be installed in the host that blocks
+any incomming connection.
+
+This patch removes the code that starts the service.
+
+Closes-Bug: #1898065
+
+Change-Id: Ic8fa257af92f78bc621f27f6765bb26dbb71de3a
+Signed-off-by: Daniel Alvarez <dalvarez@redhat.com>
+---
+ tools/fixup_stuff.sh | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/tools/fixup_stuff.sh b/tools/fixup_stuff.sh
+index a3bda2b7..142cd79f 100755
+--- a/tools/fixup_stuff.sh
++++ b/tools/fixup_stuff.sh
+@@ -127,12 +127,6 @@ function fixup_fedora {
+         # [4] https://docs.openstack.org/devstack/latest/guides/neutron.html
+         if is_package_installed firewalld; then
+             sudo systemctl disable firewalld
+-            # The iptables service files are no longer included by default,
+-            # at least on a baremetal Fedora 21 Server install.
+-            install_package iptables-services
+-            sudo systemctl enable iptables
+-            sudo systemctl stop firewalld
+-            sudo systemctl start iptables
+         fi
+     fi
+
+--
+2.27.0
